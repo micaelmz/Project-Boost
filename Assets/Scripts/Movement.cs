@@ -7,33 +7,41 @@ public class Movement : MonoBehaviour {
     [SerializeField] private float verticalThrustForce = 1000f;
     [SerializeField] private float horizontalThrustForce = 100f;
 
+    // Components
     private AudioSource audioSource;
     private Rigidbody rocketRigidyBody;
+    
+    // States
+    private bool previousJumpState = false;
 
-    // Start is called before the first frame update
     void Start() {
         rocketRigidyBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update() {
         ProcessVerticalInput();
         ProcessHorizontalInput();
     }
-
-
+    
     void ProcessVerticalInput() {
-        if (Input.GetAxis("Jump") != 0) {
-            rocketRigidyBody.AddRelativeForce(Time.deltaTime * verticalThrustForce * Vector3.up);
-
-            if (!audioSource.isPlaying) {
-                audioSource.Play();
+        bool currentJumpState = Input.GetAxis("Jump") > 0.1f;
+        
+        // Can be jumping (true) or not jumping (false)
+        if (currentJumpState != previousJumpState) {
+            // is jumping
+            if (currentJumpState) {
+                rocketRigidyBody.AddRelativeForce(Time.deltaTime * verticalThrustForce * Vector3.up);
+                if (!audioSource.isPlaying) {
+                    audioSource.Play();
+                }
             }
-        }
-
-        if (Input.GetAxis("Jump") == 0 && audioSource.isPlaying) {
-            audioSource.Stop();
+            // Is not jumping
+            else {
+                audioSource.Stop();
+            }
+            
+            previousJumpState = currentJumpState;
         }
     }
 
