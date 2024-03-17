@@ -447,6 +447,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2201547898905312357, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201547898905312357, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
+      propertyPath: m_Pitch
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201547898905312357, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 0.45
+      objectReference: {fileID: 0}
     - target: {fileID: 4854510876619073702, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
       propertyPath: m_Name
       value: Rocket
@@ -457,7 +469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5929736738299907005, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.99
+      value: 1.381
       objectReference: {fileID: 0}
     - target: {fileID: 5929736738299907005, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
       propertyPath: m_LocalPosition.z
@@ -490,14 +502,6 @@ PrefabInstance:
     - target: {fileID: 5929736738299907005, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7104695529712524207, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
-      propertyPath: m_Drag
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7104695529712524207, guid: 78de2fd02ce1aa346817b72c1193ac10, type: 3}
-      propertyPath: m_Constraints
-      value: 56
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
