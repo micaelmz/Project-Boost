@@ -4,16 +4,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour {
+    
     [SerializeField] private float verticalThrustForce = 1000f;
     [SerializeField] private float horizontalThrustForce = 100f;
+    [SerializeField] private AudioClip thrustSourceClip; 
 
-    private AudioSource audioSource;
+    private AudioSource _audioSource;
     private Rigidbody rocketRigidyBody;
 
     // Start is called before the first frame update
     void Start() {
         rocketRigidyBody = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -27,13 +29,13 @@ public class Movement : MonoBehaviour {
         if (Input.GetAxis("Jump") != 0) {
             rocketRigidyBody.AddRelativeForce(Time.deltaTime * verticalThrustForce * Vector3.up);
 
-            if (!audioSource.isPlaying) {
-                audioSource.Play();
+            if (!_audioSource.isPlaying) {
+                _audioSource.PlayOneShot(thrustSourceClip);
             }
         }
 
-        if (Input.GetAxis("Jump") == 0 && audioSource.isPlaying) {
-            audioSource.Stop();
+        if (Input.GetAxis("Jump") == 0 && _audioSource.isPlaying) {
+            _audioSource.Stop();
         }
     }
 

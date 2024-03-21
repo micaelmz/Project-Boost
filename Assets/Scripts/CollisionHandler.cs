@@ -3,15 +3,24 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour {
     
-    private Movement playerMovement;
-    
     [SerializeField] private float delayLoadTime;
+    [SerializeField] private AudioClip crashSourceClip;
+    [SerializeField] private AudioClip successSourceClip;
+    
+    private Movement playerMovement;
+    private AudioSource _audioSource;
+
+    private bool isTransitioning = false;
 
     private void Start() {
         playerMovement = GetComponent<Movement>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void OnCollisionEnter(Collision other) {
+        
+        if (isTransitioning) return;
+        
         switch (other.gameObject.tag) {
             case "Friendly":
                 Debug.Log("We're fine");
@@ -26,13 +35,16 @@ public class CollisionHandler : MonoBehaviour {
     }
 
     void StartNextLevelSequence() {
+        isTransitioning = true;
+        _audioSource.PlayOneShot(successSourceClip);
         playerMovement.enabled = false;
         Invoke("LoadNextLevel", delayLoadTime);
     }
 
     void StartCrashSequence() {
         // todo particles
-        // todo sfx
+        isTransitioning = true;
+        _audioSource.PlayOneShot(crashSourceClip);
         playerMovement.enabled = false;
         Invoke("ReloadLevel", delayLoadTime);
     }
