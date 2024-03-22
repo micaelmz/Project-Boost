@@ -12,11 +12,14 @@ public class CollisionHandler : MonoBehaviour {
     private Movement playerMovement;
     private AudioSource _audioSource;
 
+    private GameObject[] removableParts;
+
     private bool isTransitioning = false;
 
     private void Start() {
         playerMovement = GetComponent<Movement>();
         _audioSource = GetComponent<AudioSource>();
+        removableParts = GameObject.FindGameObjectsWithTag("RemovablePart");
     }
 
     void OnCollisionEnter(Collision other) {
@@ -48,6 +51,12 @@ public class CollisionHandler : MonoBehaviour {
         isTransitioning = true;
         _audioSource.PlayOneShot(crashSourceClip);
         crashParticle.Play();
+
+        for (int i = 0; i < removableParts.Length; i++) {
+            MeshRenderer toRemove = removableParts[i].GetComponent<MeshRenderer>();
+            toRemove.enabled = false;
+        }
+        
         playerMovement.enabled = false;
         Invoke("ReloadLevel", delayLoadTime);
     }

@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 1727343797507908152}
   m_Layer: 0
   m_Name: Foot Front
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 4081786543074987376}
   m_Layer: 0
   m_Name: Foot Right
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 5076416164099633758}
   m_Layer: 0
   m_Name: Window Glass Back
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -697,7 +697,7 @@ GameObject:
   - component: {fileID: 4820228743290779305}
   m_Layer: 0
   m_Name: Foot Back
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1257,7 +1257,7 @@ GameObject:
   - component: {fileID: 695327728667141164}
   m_Layer: 0
   m_Name: Foot Left
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1364,7 +1364,7 @@ GameObject:
   - component: {fileID: 3416057571573906387}
   m_Layer: 0
   m_Name: Window Glass Front
-  m_TagString: Untagged
+  m_TagString: RemovablePart
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
