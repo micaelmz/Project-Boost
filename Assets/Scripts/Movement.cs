@@ -4,17 +4,22 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Movement : MonoBehaviour {
-    
     [SerializeField] private float verticalThrustForce = 1000f;
     [SerializeField] private float horizontalThrustForce = 100f;
-    [SerializeField] private AudioClip thrustSourceClip; 
+
+    [SerializeField] private AudioClip thrustSourceClip;
+
+    [SerializeField] private ParticleSystem leftThrustParticle;
+    [SerializeField] private ParticleSystem rightThrustParticle;
+    [SerializeField] private ParticleSystem mainThrustParticle;
+
 
     private AudioSource _audioSource;
-    private Rigidbody rocketRigidyBody;
+    private Rigidbody _rigidBody;
 
     // Start is called before the first frame update
     void Start() {
-        rocketRigidyBody = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
     }
 
@@ -26,30 +31,70 @@ public class Movement : MonoBehaviour {
 
 
     void ProcessVerticalInput() {
-        if (Input.GetAxis("Jump") != 0) {
-            rocketRigidyBody.AddRelativeForce(Time.deltaTime * verticalThrustForce * Vector3.up);
+        bool isJumping = Input.GetAxis("Jump") != 0;
 
-            if (!_audioSource.isPlaying) {
-                _audioSource.PlayOneShot(thrustSourceClip);
-            }
-        }
-
-        if (Input.GetAxis("Jump") == 0 && _audioSource.isPlaying) {
-            _audioSource.Stop();
-        }
+        if (isJumping) 
+            HandleThrust();
+        
+        else StopThrust();
     }
 
+    void HandleThrust() {
+        _rigidBody.AddRelativeForce(Time.deltaTime * verticalThrustForce * Vector3.up);
+
+        // Play SFX
+        if (!_audioSource.isPlaying)
+            _audioSource.PlayOneShot(thrustSourceClip);
+
+        // Play Particles
+        if (!mainThrustParticle.isPlaying) 
+            mainThrustParticle.Play();
+    }
+
+    void StopThrust() {
+        // Stop SFX
+        if (_audioSource.isPlaying)
+            _audioSource.Stop();
+
+        // Stop Particles
+        if (mainThrustParticle.isPlaying)
+            mainThrustParticle.Stop();
+    }
+
+    
     void ProcessHorizontalInput() {
         var horizontalAxis = Input.GetAxis("Horizontal");
+        var isRotating = horizontalAxis != 0;
 
-        if (horizontalAxis != 0) {
-            rocketRigidyBody.freezeRotation = true; // travando o controle para que manualmente seja alterado
-            transform.Rotate(
-                0,
-                0,
-                Time.deltaTime * horizontalThrustForce * horizontalAxis
-            );
-            rocketRigidyBody.freezeRotation = false; // liberando para que a fisica do jogo possa modificar como quiser novamente
+        if (isRotating) {
+            HandlePlayerDirection(horizontalAxis);
+            HandleThrustParticles(horizontalAxis);
         }
+        else StopPlayerDirection();
+    }
+
+    void HandlePlayerDirection(float horizontalAxis) {
+        _rigidBody.freezeRotation = true;
+        transform.Rotate(
+            0,
+            0,
+            Time.deltaTime * horizontalThrustForce * horizontalAxis
+        );
+        _rigidBody.freezeRotation = false;
+    }
+
+    void HandleThrustParticles(float horizontalAxis) {
+        var isGoingRight = horizontalAxis > 0;
+
+        if (isGoingRight && !rightThrustParticle.isPlaying)
+            rightThrustParticle.Play();
+
+        else if (!isGoingRight && !leftThrustParticle.isPlaying)
+            leftThrustParticle.Play();
+    }
+
+    void StopPlayerDirection() {
+        leftThrustParticle.Stop();
+        rightThrustParticle.Stop();
     }
 }
