@@ -4,12 +4,14 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour {
     
     [SerializeField] private float delayLoadTime;
+    
     [SerializeField] private AudioClip crashSourceClip;
     [SerializeField] private AudioClip successSourceClip;
+    
     [SerializeField] private ParticleSystem successParticle;
     [SerializeField] private ParticleSystem crashParticle;
     
-    private Movement playerMovement;
+    private Movement _movement;
     private AudioSource _audioSource;
 
     private GameObject[] removableParts;
@@ -17,7 +19,7 @@ public class CollisionHandler : MonoBehaviour {
     private bool isTransitioning = false;
 
     private void Start() {
-        playerMovement = GetComponent<Movement>();
+        _movement = GetComponent<Movement>();
         _audioSource = GetComponent<AudioSource>();
         removableParts = GameObject.FindGameObjectsWithTag("RemovablePart");
     }
@@ -41,24 +43,32 @@ public class CollisionHandler : MonoBehaviour {
 
     void StartNextLevelSequence() {
         isTransitioning = true;
+        _movement.enabled = false;
+        
         _audioSource.PlayOneShot(successSourceClip);
         successParticle.Play();
-        playerMovement.enabled = false;
-        Invoke("LoadNextLevel", delayLoadTime);
+        
+        Invoke(nameof(LoadNextLevel), delayLoadTime);
     }
 
     void StartCrashSequence() {
         isTransitioning = true;
+        _movement.enabled = false;
+        
         _audioSource.PlayOneShot(crashSourceClip);
         crashParticle.Play();
 
-        for (int i = 0; i < removableParts.Length; i++) {
-            MeshRenderer toRemove = removableParts[i].GetComponent<MeshRenderer>();
-            toRemove.enabled = false;
-        }
+        RemoveRemovableParts();
         
-        playerMovement.enabled = false;
-        Invoke("ReloadLevel", delayLoadTime);
+        Invoke(nameof(ReloadLevel), delayLoadTime);
+    }
+
+    void RemoveRemovableParts() {
+        // aka "disassemble rocket"
+        for (int i = 0; i < removableParts.Length; i++) {
+            MeshRenderer partToRemove = removableParts[i].GetComponent<MeshRenderer>();
+            partToRemove.enabled = false;
+        }
     }
 
     void ReloadLevel() {
@@ -68,7 +78,8 @@ public class CollisionHandler : MonoBehaviour {
 
     void LoadNextLevel() {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        int nextSceneIndex = (currentSceneIndex + 1) % SceneManager.sceneCountInBuildSettings;
+        int lastSceneIndex = SceneManager.sceneCountInBuildSettings;
+        int nextSceneIndex = (currentSceneIndex + 1) % lastSceneIndex; // if it is the last scene, it returns 0, which implies reloading the first level again
         SceneManager.LoadScene(nextSceneIndex);
     }
 }
